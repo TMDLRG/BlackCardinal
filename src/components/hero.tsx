@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import BlackCardinalLogo from '../../images/BlackCardinalLogo.png';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
 
@@ -35,7 +36,7 @@ export function Hero() {
         <div className="mb-8 flex justify-center">
           <div className="relative h-48 w-48 md:h-64 md:w-64">
             <Image
-              src="/BlackCardinalLogo.png"
+              src={BlackCardinalLogo}
               alt="BlackCardinal Logo"
               fill
               priority
