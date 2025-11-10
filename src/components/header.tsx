@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import BlackCardinalLogo from '../../images/BlackCardinalLogo.png';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CartButton } from '@/components/cart-button';
@@ -18,7 +17,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2" aria-label="BlackCardinal Home">
           <div className="relative h-8 w-8">
             <Image
-              src={BlackCardinalLogo}
+              src="/BlackCardinalLogo.png"
               alt="BlackCardinal"
               width={32}
               height={32}
