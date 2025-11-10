@@ -17,36 +17,77 @@ export async function ensureTestUser({
 } = {}) {
   const resolvedRole = role as Role;
 
-  return prisma.user.upsert({
-    where: { id: TEST_USER_ID },
-    update: {
-      email,
-      name,
-      role: resolvedRole,
-      orientationScheduledAt: null,
-      rosterOptIn: false,
-    },
-    create: {
-      id: TEST_USER_ID,
-      email,
-      name,
-      role: resolvedRole,
-    },
+  // Try to find user by email first (works for both SQLite and PostgreSQL)
+  let user = await prisma.user.findUnique({
+    where: { email },
   });
+
+  if (user) {
+    // Update existing user
+    return prisma.user.update({
+      where: { id: user.id },
+      data: {
+        name,
+        role: resolvedRole,
+        orientationScheduledAt: null,
+        rosterOptIn: false,
+      },
+    });
+  }
+
+  // Create new user
+  // For SQLite (local), use fixed ID; for PostgreSQL (production), let it auto-generate
+  try {
+    return await prisma.user.create({
+      data: {
+        id: TEST_USER_ID, // Try with fixed ID first (SQLite)
+        email,
+        name,
+        role: resolvedRole,
+      },
+    });
+  } catch (error) {
+    // If fixed ID fails (PostgreSQL), create without ID
+    return await prisma.user.create({
+      data: {
+        email,
+        name,
+        role: resolvedRole,
+      },
+    });
+  }
 }
 
 export async function ensureTestProfile() {
+  // Find user by email to get their ID
+  const user = await prisma.user.findUnique({
+    where: { email: DEFAULT_TEST_EMAIL },
+  });
+
+  if (!user) {
+    throw new Error('Test user not found. Call ensureTestUser first.');
+  }
+
   await prisma.profile.upsert({
-    where: { userId: TEST_USER_ID },
+    where: { userId: user.id },
     update: {},
     create: {
-      userId: TEST_USER_ID,
+      userId: user.id,
     },
   });
 }
 
 export async function ensureTestBootcampEnrollment() {
-  const enrollment = await getOrCreateBootcampEnrollment(TEST_USER_ID);
+  // Find user by email to get their ID
+  const user = await prisma.user.findUnique({
+    where: { email: DEFAULT_TEST_EMAIL },
+  });
+
+  if (!user) {
+    throw new Error('Test user not found. Call ensureTestUser first.');
+  }
+
+  const enrollment = await getOrCreateBootcampEnrollment(user.id);
   return enrollment;
 }
 
@@ -54,36 +95,45 @@ export async function resetTestUserData() {
   // Ensure the user exists before attempting to reset
   await ensureTestUser();
 
+  // Find user by email to get their ID
+  const user = await prisma.user.findUnique({
+    where: { email: DEFAULT_TEST_EMAIL },
+  });
+
+  if (!user) {
+    throw new Error('Test user not found after ensureTestUser.');
+  }
+
   await prisma.$transaction([
     prisma.businessCanvas.deleteMany({
-      where: { enrollment: { userId: TEST_USER_ID } },
+      where: { enrollment: { userId: user.id } },
     }),
     prisma.reflection.deleteMany({
-      where: { enrollment: { userId: TEST_USER_ID } },
+      where: { enrollment: { userId: user.id } },
     }),
     prisma.weekProgress.deleteMany({
-      where: { enrollment: { userId: TEST_USER_ID } },
+      where: { enrollment: { userId: user.id } },
     }),
     prisma.bootcampEnrollment.deleteMany({
-      where: { userId: TEST_USER_ID },
+      where: { userId: user.id },
     }),
     prisma.lead.deleteMany({
-      where: { ownerId: TEST_USER_ID },
+      where: { ownerId: user.id },
     }),
     prisma.deal.deleteMany({
-      where: { ownerId: TEST_USER_ID },
+      where: { ownerId: user.id },
     }),
     prisma.profile.deleteMany({
-      where: { userId: TEST_USER_ID },
+      where: { userId: user.id },
     }),
     prisma.enrollment.deleteMany({
-      where: { userId: TEST_USER_ID },
+      where: { userId: user.id },
     }),
   ]);
 
   // Reset user fields back to defaults
   await prisma.user.update({
-    where: { id: TEST_USER_ID },
+    where: { id: user.id },
     data: {
       name: DEFAULT_TEST_NAME,
       email: DEFAULT_TEST_EMAIL,
