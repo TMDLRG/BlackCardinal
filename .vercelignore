@@ -1,0 +1,19 @@
+# Ignore local development files
+src/podcast.db
+src/podcast.db-journal
+*.db
+*.db-journal
+
+# Ignore test files
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+playwright-report/
+test-results/
+coverage/
+
+# Ignore development files
+.env.local
+.env.development
+

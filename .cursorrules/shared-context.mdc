@@ -1,0 +1,443 @@
+---
+alwaysApply: true
+description: "Shared context - single source of truth for all project standards (referenced by all specialists)"
+priority: 0
+---
+
+# BlackCardinal Project - Shared Context
+# All AI personas MUST reference this file for consistency
+
+## Brand Identity
+
+**Voice**: Luxury, exclusive, aspirational - "Disneyland awe × Ralph Lauren elegance"
+**Logo**: `/public/BlackCardinalLogo.png` (centerpiece of hero reveal)
+**Color Palette**: Neutral sophistication (ink/charcoal/oat), understated, crisp spacing, subtle depth
+**Typography**: System fonts preferred, crisp, readable, professional
+**Tagline**: "Luxury That Speaks Volumes."
+
+**Brand Principles**:
+- Premium without pretension
+- Exclusive but welcoming to those who belong
+- Awe-inspiring first impression (the "world entry" moment)
+- Elegant restraint over flashy excess
+- Confidence through quality, not volume
+
+**Tone Guidelines**:
+- Mentor-to-hustler: "You know how to sell. You know how to read people. That's 80%. The other 20% is structure—this platform gives you that."
+- Conservative claims: Use provisional language where benefits aren't guaranteed (per partner kit)
+- Person-to-person: Direct, clear, respectful
+- No corporate speak, no over-promising, no hype
+
+## Tech Stack
+
+**Framework**: Next.js 14+ (App Router), TypeScript strict mode
+**Styling**: Tailwind CSS + shadcn/ui components
+**Database**: Prisma ORM + PostgreSQL (PlanetScale or Neon hosted)
+**Authentication**: NextAuth v4+ (email magic link + OAuth providers)
+**Payments**: 
+  - Fiat: Stripe (sandbox/test mode)
+  - Crypto: Pluggable gateway adapter interface (Coinbase Commerce style)
+**Email**: Transactional (Resend or Mailgun adapter pattern)
+**File Storage**: S3-compatible (AWS S3, Cloudflare R2, or Vercel Blob)
+**Hosting**: Vercel (SSR/ISR, edge functions, cron jobs)
+**Testing**: 
+  - E2E: Playwright
+  - Unit: Vitest
+  - A11y: Axe-core
+**Analytics**: Privacy-respecting, no PII tracking
+**Monitoring**: Vercel Analytics + custom error boundaries
+
+## Quality Standards (Non-Negotiable)
+
+**Accessibility**: WCAG 2.2 Level AA minimum
+- Semantic HTML5 elements
+- ARIA labels where needed
+- Keyboard navigation (Tab, Enter, Esc)
+- Focus indicators (visible, 2px outline minimum)
+- Color contrast ≥ 4.5:1 for text
+- Skip navigation links
+- Screen reader tested
+
+**Performance**: 
+- Largest Contentful Paint (LCP) < 2.5s on mid-tier mobile (4G)
+- First Input Delay (FID) < 100ms
+- Cumulative Layout Shift (CLS) < 0.1
+- Image optimization (next/image, WebP/AVIF)
+- Code splitting and lazy loading
+- Font loading strategy (font-display: swap)
+
+**Security**:
+- Input validation: Zod schemas for all user input
+- CSRF protection: NextAuth built-in + custom tokens where needed
+- SQL injection prevention: Prisma parameterized queries only
+- XSS prevention: React escaping + DOMPurify for rich text
+- Webhook signature verification: Stripe webhook secrets
+- Rate limiting: API routes (Vercel Edge Config or Upstash)
+- Secure headers: CSP, X-Frame-Options, HSTS
+- Environment variables: Never commit secrets, use Vercel env vars
+- Authentication: Server-side session validation, HTTP-only cookies
+
+**SEO & Metadata**:
+- Meta tags: title, description, og:image, twitter:card
+- JSON-LD structured data: Organization, Product, Event
+- Sitemap.xml generated
+- Robots.txt configured
+- Canonical URLs
+- i18n-ready: en-US default, structure for localization
+
+**Code Quality**:
+- TypeScript strict mode, no `any` types without justification
+- ESLint + Prettier configured
+- No console.log in production code
+- No TODO comments (create GitHub issues instead)
+- No placeholder data (use real content or clear [DATA NEEDED] flags)
+- Error boundaries for all async operations
+- Proper loading and error states
+
+## Data Model (Prisma Schema Key Entities)
+
+```prisma
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  role         Role     @default(FOUNDER)
+  rosterOptIn  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  profile      Profile?
+  leads        Lead[]
+  deals        Deal[]
+  enrollments  Enrollment[]
+}
+
+model Profile {
+  userId       String   @id
+  city         String?
+  bio          String?  @db.Text
+  avatarUrl    String?
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Lead {
+  id           String    @id @default(cuid())
+  ownerId      String
+  name         String
+  email        String?
+  phone        String?
+  notes        String?   @db.Text
+  stage        LeadStage @default(NEW)
+  nextAt       DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  owner        User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  deals        Deal[]
+}
+
+model Deal {
+  id           String     @id @default(cuid())
+  ownerId      String
+  leadId       String?
+  amountCents  Int
+  product      String
+  status       DealStatus @default(OPEN)
+  closedAt     DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  owner        User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  lead         Lead?      @relation(fields: [leadId], references: [id], onDelete: SetNull)
+}
+
+model Enrollment {
+  id           String   @id @default(cuid())
+  userId       String
+  program      String   // "Founding-50-bootcamp"
+  week         Int      @default(1)
+  progress     Json     // { week1: { lesson1: true, quiz1: true }, ... }
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Role { ADMIN FOUNDER CUSTOMER }
+enum LeadStage { NEW CONTACTED QUALIFIED WON LOST }
+enum DealStatus { OPEN WON LOST REFUNDED }
+```
+
+## Information Architecture & Routes
+
+**Public Routes** (unauthenticated):
+- `/` - Home: World of BlackCardinal (hero reveal, value prop, social proof)
+- `/store` - Shop: Core merchandise + limited drops
+- `/founding-50` - Program pitch: Founding 50 offer, bootcamp preview, CTA
+- `/join` - Checkout: Payment (fiat/crypto) → account creation → orientation enrollment
+- `/roster` - Public list: Founding 50 members (opt-in only, minimal profile)
+- `/legal/waiver` - BYOA waiver
+- `/legal/terms` - Terms of service
+- `/legal/privacy` - Privacy policy
+
+**Authenticated Routes** (founders/customers):
+- `/orientation` - Onboarding: Welcome, bootcamp intro, schedule first call (.ics download)
+- `/bootcamp` - Curriculum hub: 10-week program, progress tracker
+- `/bootcamp/week-[1-10]` - Weekly lessons: Content, exercises, quizzes
+- `/dashboard` - Founder toolkit: CRM (leads/deals), reminders, coaching prompts
+
+**Admin Routes** (role: ADMIN):
+- `/admin/founders` - Approve/manage founders
+- `/admin/products` - Product catalog management
+- `/admin/orders` - Order history and fulfillment
+- `/admin/content` - Bootcamp content editor
+
+**API Routes**:
+- `/api/auth/*` - NextAuth handlers
+- `/api/webhooks/stripe` - Stripe payment webhooks
+- `/api/webhooks/crypto` - Crypto gateway webhooks
+- `/api/crm/leads` - Lead CRUD
+- `/api/crm/deals` - Deal CRUD
+- `/api/enrollment/*` - Bootcamp progress tracking
+- `/api/ics/generate` - Generate .ics calendar files
+
+## Bootcamp Content Pillars (10 Weeks)
+
+**Weeks 1-2**: ORC Mastery (Outcome, Role, Context)
+- Apply ORC framework to personal venture
+- Define clear outcomes for founder's business
+- Practice structured thinking
+
+**Weeks 3-6**: 5Ps Deep-Dive (Proper Preparation Prevents Poor Performance)
+- Source content from @book_v11.txt
+- Self-audit exercises
+- Performance review and adjustment
+
+**Weeks 7-8**: Person-to-Person Sales
+- Sales scripts and frameworks
+- Role-play exercises
+- Objection handling
+- Neighborhood activation strategies
+
+**Week 9**: First BlackCardinal Sale
+- Run sample kit (BYOA offer)
+- Fit checks for events
+- Event outline and execution
+
+**Week 10**: Review & Public Commitment
+- KPI setting and tracking
+- Success metrics
+- Public roster opt-in
+- Graduation and next steps
+
+## Product Catalog
+
+**Core Collection** (always available):
+- Core Tee ($48) - Premium cotton, minimal branding
+- Cap ($38) - Structured, embroidered logo
+- Mug ($28) - Ceramic, understated elegance
+- Hoodie ($98) - Heavyweight, luxury comfort
+
+**Limited Drops** (seasonal, scarcity):
+- Special edition items
+- Exclusive colorways
+- Founder-only releases
+
+**Service SKU**:
+- BYOA (Bring Your Own Audience) - $5,000
+- Requires waiver acknowledgment
+- Links to `/legal/waiver` at checkout
+- Conservative language: "Subject to conditions, not a guarantee"
+
+## Copy & Content References
+
+**Source Materials**:
+- `BlackCardinal_FoundingFifty_Kit_V1ALL.txt` - Partner kit language, conservative claims
+- `index.html` - Mock site structure, section copy, product descriptions
+- `book_v11.txt` - ORCHESTRATE framework, ORC methodology, 5Ps content
+
+**Copy Principles**:
+- Use exact language from partner kit for offers and benefits
+- Conservative claims: "can help" vs "will guarantee"
+- Provisional language for BYOA: "inspired by Jesse's success, results vary"
+- No income claims without disclaimers
+- Mentor tone: encouraging but realistic
+
+## Development Workflow (Mandatory Process)
+
+1. **Plan**: Break down feature into testable components
+2. **Test**: Write tests BEFORE implementation (TDD)
+3. **Code**: Implement to pass tests
+4. **Run**: Execute tests (E2E + unit)
+5. **Remediate**: Fix failures, refactor
+6. **Verify**: All tests green, a11y/security checks pass
+7. **Only then proceed**: No moving forward with failing tests
+
+## Project Delivery: 3 Vertical Slices
+
+**Slice 1 - World + Funnel** (Foundation):
+- Home page with hero "world entry" reveal
+- Founding 50 pitch page
+- Checkout flow (Stripe test mode)
+- Account creation + NextAuth
+- Orientation page with .ics scheduler
+- Roster opt-in functionality
+- E2E test: anonymous → purchase → account → orientation booking
+
+**Slice 2 - Store + Crypto** (Commerce):
+- Product catalog (Core + Drops)
+- Store UI with filtering
+- Crypto gateway adapter (feature-flagged)
+- Webhook handlers (Stripe + crypto)
+- Order history
+- Email receipts
+- E2E test: browse → add to cart → pay (both methods) → receipt
+
+**Slice 3 - Bootcamp + Toolkit** (Platform):
+- Bootcamp hub with 10-week navigation
+- Week 1-10 content shells with progress tracking
+- Founder toolkit: Leads board, Deal tracker, Reminders
+- .ics generation for appointments
+- Coaching prompts (ORC + 5Ps tied to pipeline stages)
+- CSV export for CRM data
+- E2E test: login → navigate bootcamp → create lead → create deal → export
+
+## Project Constraints & Considerations
+
+**Launch Strategy**: Ship complete vertical slices, not partially finished features
+**Language**: Conservative, per partner kit guidelines (no over-promising)
+**Legal**: BYOA requires waiver acknowledgment, prominent disclaimer
+**Privacy**: No PII tracking, privacy-respecting analytics only
+**Compliance**: Crypto feature-flagged where not permitted
+**Referrals**: Deal tracking includes optional referral code for founder attribution
+**Roster**: Public opt-in only, minimal profile (name, city, bio), admin moderation
+
+## Environment Variables (Required)
+
+```bash
+# Database
+DATABASE_URL="postgresql://..."
+
+# Auth
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
+
+# Payments
+STRIPE_PUBLIC_KEY="pk_test_..."
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
+CRYPTO_GATEWAY_API_KEY="..." # Feature-flagged
+
+# Email
+EMAIL_SERVER="smtp://..."
+EMAIL_FROM="noreply@blackcardinal.com"
+
+# Storage
+S3_BUCKET="..."
+S3_REGION="..."
+S3_ACCESS_KEY="..."
+S3_SECRET_KEY="..."
+
+# Optional
+VERCEL_URL="auto-populated-by-vercel"
+NEXT_PUBLIC_GA_ID="G-..." # Privacy-respecting only
+```
+
+## File Organization
+
+```
+/app
+  /(public)           # Public pages (home, store, founding-50)
+  /(auth)             # Auth pages (sign-in, sign-up)
+  /store              # Store pages
+  /founding-50        # Pitch page
+  /join               # Checkout flow
+  /orientation        # Onboarding
+  /bootcamp           # Curriculum
+    /week-[id]        # Weekly content
+  /roster             # Public founder list
+  /dashboard          # Founder toolkit
+  /admin              # Admin dashboard
+  /api
+    /auth             # NextAuth
+    /webhooks         # Payment webhooks
+    /crm              # CRM endpoints
+    /enrollment       # Bootcamp progress
+    /ics              # Calendar generation
+
+/components
+  /ui                 # shadcn/ui components
+  /forms              # Form components
+  /layouts            # Layout components
+  /marketing          # Marketing sections
+
+/lib
+  /auth.ts            # NextAuth config
+  /db.ts              # Prisma client
+  /payments
+    /stripe.ts        # Stripe integration
+    /cryptoAdapter.ts # Crypto gateway interface
+  /email              # Email templates & sender
+  /ics.ts             # ICS file generator
+  /coach.ts           # ORC + 5Ps prompt texts
+  /validators         # Zod schemas
+
+/prisma
+  /schema.prisma      # Data model
+  /migrations         # DB migrations
+  /seed.ts            # Seed data
+
+/tests
+  /e2e                # Playwright tests
+  /unit               # Vitest tests
+
+/public
+  /BlackCardinalLogo.png
+  /images             # Optimized images
+  /fonts              # If custom fonts needed
+```
+
+## Key Integrations & Patterns
+
+**Crypto Payment Adapter** (pluggable design):
+```typescript
+interface CryptoGatewayAdapter {
+  createCharge(amount: number, currency: string): Promise<ChargeResponse>
+  verifyWebhook(signature: string, payload: string): boolean
+  getChargeStatus(chargeId: string): Promise<ChargeStatus>
+}
+```
+
+**ICS Calendar Generation**:
+```typescript
+function generateICS(event: {
+  title: string
+  start: Date
+  end: Date
+  description?: string
+  location?: string
+}): string
+```
+
+**Coaching Prompts** (context-aware):
+- Tied to lead stage (NEW → ORC questions, CONTACTED → 5Ps audit)
+- Weekly bootcamp prompts
+- First-sale checklist for Week 9
+
+**Progress Tracking** (JSON structure):
+```json
+{
+  "week1": { "lesson1": true, "quiz1": true, "exercise1": false },
+  "week2": { "lesson1": false, "quiz1": false }
+}
+```
+
+## Non-Negotiable Standards Summary
+
+1. **Accessibility**: WCAG 2.2 AA, semantic HTML, keyboard nav
+2. **Security**: Zod validation, CSRF protection, webhook signatures
+3. **Performance**: LCP < 2.5s, optimized images, code splitting
+4. **Testing**: TDD workflow, E2E + unit tests, a11y scans
+5. **Brand**: Conservative language, luxury aesthetics, mentor tone
+6. **Code Quality**: TypeScript strict, no console.log, no placeholders
+7. **Privacy**: No PII tracking, secure session management
+
+---
+
+**All AI personas must reference this file to ensure consistency across the BlackCardinal project.**

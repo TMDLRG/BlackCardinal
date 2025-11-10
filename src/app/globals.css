@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+    --primary: 0 0% 7%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 30 7% 91%;
+    --secondary-foreground: 0 0% 7%;
+    --muted: 0 0% 42%;
+    --muted-foreground: 0 0% 42%;
+    --accent: 30 7% 91%;
+    --accent-foreground: 0 0% 7%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 7% 83%;
+    --input: 30 7% 83%;
+    --ring: 0 0% 7%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 7%;
+    --foreground: 30 7% 91%;
+    --card: 0 0% 10%;
+    --card-foreground: 30 7% 91%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 30 7% 91%;
+    --primary: 30 7% 91%;
+    --primary-foreground: 0 0% 7%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 30 7% 91%;
+    --muted: 0 0% 63%;
+    --muted-foreground: 0 0% 63%;
+    --accent: 0 0% 16%;
+    --accent-foreground: 30 7% 91%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 30 7% 91%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 30 7% 91%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-variant-ligatures: none;
+    font-feature-settings: 'liga' 0, 'clig' 0, 'dlig' 0, 'calt' 0;
+  }
+}
+
+/* Prevent horizontal scrolling */
+html, body {
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+/* Ensure all elements respect viewport width */
+* {
+  box-sizing: border-box;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print styles for Business Canvas PDF export */
+@media print {
+  @page {
+    margin: 0.5in;
+  }
+  
+  /* Hide everything except preview */
+  body > header,
+  body > nav,
+  body > aside,
+  body > footer,
+  main aside,
+  main nav,
+  button,
+  textarea,
+  input {
+    display: none !important;
+  }
+  
+  /* Clean up preview for print */
+  [data-canvas-preview] {
+    box-shadow: none !important;
+    border: none !important;
+  }
+  
+  /* Page breaks */
+  article {
+    page-break-inside: avoid;
+  }
+}
+

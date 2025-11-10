@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlackCardinal Business Canvas & Execution Plan</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #111 0%, #333 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #ddd;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #666;
+      transition: all 0.3s;
+    }
+
+    .tab.active {
+      color: #111;
+      border-bottom-color: #111;
+    }
+
+    .tab:hover {
+      color: #111;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .canvas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .canvas-section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .canvas-section h3 {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: #111;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .canvas-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .canvas-section li {
+      padding: 8px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .canvas-section li:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #666;
+    }
+
+    .simulator {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .control-group {
+      margin-bottom: 25px;
+    }
+
+    .control-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .control-group input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: #ddd;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .control-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #111;
+      cursor: pointer;
+    }
+
+    .control-group input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #111;
+      cursor: pointer;
+      border: none;
+    }
+
+    .control-value {
+      display: inline-block;
+      margin-left: 10px;
+      font-weight: 700;
+      color: #111;
+      min-width: 80px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .metric-card {
+      background: linear-gradient(135deg, #f8f8f8 0%, #fff 100%);
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #111;
+    }
+
+    .metric-label {
+      font-size: 0.875rem;
+      /* Darker color for improved contrast */
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .metric-subtext {
+      font-size: 0.875rem;
+      /* Darker color for improved contrast */
+      color: #777;
+      margin-top: 5px;
+    }
+
+    .guidance-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .guidance-box.success {
+      background: #d4edda;
+      border-left-color: #28a745;
+    }
+
+    .guidance-box.warning {
+      background: #f8d7da;
+      border-left-color: #dc3545;
+    }
+
+    .guidance-box h4 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .scenario-compare {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .scenario-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+    }
+
+    .scenario-card.selected {
+      border-color: #111;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .scenario-card h4 {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .action-plan {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .action-step {
+      background: #f8f9fa;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #111;
+    }
+
+    .action-step h4 {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-number {
+      background: #111;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    button {
+      background: #111;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .info-icon {
+      cursor: help;
+      /* Darker background for contrast */
+      background: #333;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .toggle-detail {
+      cursor: pointer;
+      /* Use accessible blue for interactive text */
+      color: #007bff;
+      text-decoration: underline;
+      font-size: 0.875rem;
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    .detail-content {
+      display: none;
+      margin-top: 15px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .detail-content.show {
+      display: block;
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: #000;
+      }
+      /* Hide navigation bar and buttons when printing */
+      .tabs {
+        display: none !important;
+      }
+      button {
+        display: none !important;
+      }
+      /* Show all tab contents and avoid splitting within pages */
+      .tab-content {
+        display: block !important;
+        page-break-inside: avoid;
+      }
+      /* Specifically hide scenario load buttons inside cards */
+      .scenario-card button {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎯 BlackCardinal Business Canvas & Execution Plan</h1>
+      <p>Your complete guide from planning to profit. Built for Jesse, by someone who's been there.</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="canvas" onclick="switchTab('canvas', this)">📋 Business Canvas</button>
+      <button class="tab" data-tab="simulator" onclick="switchTab('simulator', this)">💰 Financial Simulator</button>
+      <button class="tab" data-tab="scenarios" onclick="switchTab('scenarios', this)">📊 Scenario Planner</button>
+      <button class="tab" data-tab="execution" onclick="switchTab('execution', this)">✅ Execution Plan</button>
+      <button class="tab" data-tab="guidance" onclick="switchTab('guidance', this)">🧭 Expert Guidance</button>
+    </div>
+
+    <!-- TAB: Business Canvas -->
+    <div id="canvas" class="tab-content active">
+      <div class="canvas-grid">
+        <div class="canvas-section">
+          <h3>🎯 The Problem</h3>
+          <ul>
+            <li>People want unique, meaningful apparel but hate fast fashion</li>
+            <li>Existing merch is generic and impersonal</li>
+            <li>No good way to customize premium pieces sustainably</li>
+            <li>Socially-conscious buyers struggle to find brands with real purpose</li>
+          </ul>
+        </div>
+
+        <div class="canvas-section">
+          <h3>💡 Your Solution</h3>
+          <ul>
+            <li><strong>BlackCardinal Merch:</strong> Limited-run luxury basics with meaning</li>
+            <li><strong>BYOA Service:</strong> Customers bring apparel, we press custom designs</li>
+            <li><strong>Founding Fifty Partners:</strong> 50 people sell for you (like Avon for heat press)</li>
+            <li><strong>5% to Autism Nonprofits:</strong> Mission-driven giving built into every sale</li>
+          </ul>
+        </div>
+
+        <div class="canvas-section">
+          <h3>🎁 Unique Value</h3>
+          <ul>
+            <li>"Luxury that speaks volumes" - understated quality</li>
+            <li>Sustainability through BYOA (extend garment life)</li>
+            <li>Personal mission (autism awareness) = authenticity</li>
+            <li>Direct sales model = relationship-first, not transactional</li>
+          </ul>
+        </div>
+
+        <div class="canvas-section">
+          <h3>🚀 Unfair Advantage</h3>
+          <ul>
+            <li><strong>Your Street Sales Experience:</strong> You know how to move product person-to-person</li>
+            <li><strong>Personal Story:</strong> Jesse's autism connection is real and resonates</li>
+            <li><strong>Low Overhead Model:</strong> No storefront needed, partners do distribution</li>
+            <li><strong>First Mover:</strong> Nobody's doing Avon-style heat press transfers yet</li>
+          </ul>
+        </div>
+
+        <div class="canvas-section">
+          <h3>👥 Customer Segments</h3>
+          <ul>
+            <li><strong>End Buyers:</strong> Design-conscious 25-45, values-driven</li>
+            <li><strong>Founding Partners:</strong> Hustlers, side-giggers, community connectors</li>
+            <li><strong>BYOA Customers:</strong> DIY creatives who want unique pieces</li>
+            <li><strong>Event Attendees:</strong> Pop-ups at gyms, coffee shops, markets</li>
+          </ul>
+        </div>
+
+        <div class="canvas-section">
+          <h3>📢 Channels</h3>
+          <ul>
+            <li><strong>Direct Sales Force:</strong> 50 Founding Partners selling in their networks</li>
+            <li><strong>Pop-Up Events:</strong> BYOA activations at local venues</li>
+            <li><strong>Social Media:</strong> Instagram for lifestyle, purpose-driven content</li>
+            <li><strong>Word of Mouth:</strong> Mission + quality = organic referrals</li>
+          </ul>
+        </div>
+
+        <div class="canvas-section">
+          <h3>📏 Key Metrics</h3>
+          <ul>
+            <li><strong>Partners Active:</strong> How many of your 50 are actually selling</li>
+            <li><strong>Sales Per Partner:</strong> Average monthly revenue each partner generates</li>
+            <li><strong>Gross Margin:</strong> Must stay above 55% to survive</li>
+            <li><strong>Cash Runway:</strong> Months you can operate before running out of money</li>
+          </ul>
+        </div>
+
+        <div class="canvas-section">
+          <h3>💵 Cost Structure</h3>
+          <ul>
+            <li><strong>Product Costs:</strong> Blanks, ink, transfers (40-42% of sale price)</li>
+            <li><strong>Partner Commissions:</strong> 20-30% of each sale they make</li>
+            <li><strong>Starter Kits:</strong> $50 from partners covers samples, you net ~$15</li>
+            <li><strong>Operating Costs:</strong> Heat press, supplies, shipping, your time</li>
+          </ul>
+        </div>
+
+        <div class="canvas-section">
+          <h3>💰 Revenue Streams</h3>
+          <ul>
+            <li><strong>Partner Kit Sales:</strong> $50 × 50 partners = $2,500 upfront</li>
+            <li><strong>Merch Sales:</strong> $32-85 per item, 58-66% margins</li>
+            <li><strong>BYOA Service:</strong> $18-35+ per press, 70%+ margins</li>
+            <li><strong>Event Pop-Ups:</strong> High-volume days, direct sales</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Financial Simulator -->
+    <div id="simulator" class="tab-content">
+      <div class="simulator">
+        <h2>💰 Real-Time Financial Simulator</h2>
+        <p style="margin-bottom: 30px; color: #666;">Adjust the dials to see how different decisions affect your money. These are REAL numbers based on actual business costs.</p>
+
+        <div class="control-group">
+          <label id="label-partners" for="partners">
+            How many Founding Partners do you recruit?
+          </label>
+          <span class="control-value" id="val-partners">25</span>
+          <input type="range" id="partners" min="0" max="50" value="25" step="1" oninput="updateSimulation()" aria-labelledby="label-partners">
+          <div style="font-size: 0.875rem; color: #555; margin-top: 5px;">
+            Reality check: Getting 50 is tough. Start with 25 as your goal, 10-15 is still solid.
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label id="label-active-rate" for="active-rate">
+            What % of partners will ACTUALLY sell each month?
+          </label>
+          <span class="control-value" id="val-active">60%</span>
+          <input type="range" id="active-rate" min="0" max="100" value="60" step="5" oninput="updateSimulation()" aria-labelledby="label-active-rate">
+          <div style="font-size: 0.875rem; color: #555; margin-top: 5px;">
+            Street truth: Not everyone stays active. 40-60% active rate is normal for direct sales.
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label id="label-sales-per" for="sales-per-partner">
+            Average sales per ACTIVE partner per month
+          </label>
+          <span class="control-value" id="val-sales-per">$250</span>
+          <input type="range" id="sales-per-partner" min="0" max="1000" value="250" step="25" oninput="updateSimulation()" aria-labelledby="label-sales-per">
+          <div style="font-size: 0.875rem; color: #555; margin-top: 5px;">
+            $250/month = 3-7 items sold. That's realistic for part-timers. Top performers hit $500-800.
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label id="label-commission" for="commission">
+            Partner commission rate
+          </label>
+          <span class="control-value" id="val-commission">25%</span>
+          <input type="range" id="commission" min="15" max="40" value="25" step="5" oninput="updateSimulation()" aria-labelledby="label-commission">
+          <div style="font-size: 0.875rem; color: #555; margin-top: 5px;">
+            25% is solid. Lower = they quit, higher = you don't make enough. Don't go below 20%.
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label id="label-operating" for="operating-costs">
+            Your monthly operating costs (supplies, shipping, your hustle)
+          </label>
+          <span class="control-value" id="val-operating">$400</span>
+          <input type="range" id="operating-costs" min="200" max="2000" value="400" step="50" oninput="updateSimulation()" aria-labelledby="label-operating">
+          <div style="font-size: 0.875rem; color: #555; margin-top: 5px;">
+            Don't underestimate this. Heat press maintenance, ink, shipping materials, gas for events.
+          </div>
+        </div>
+
+        <div class="metrics-grid" id="simulation-results" aria-live="polite">
+          <!-- Results populated by JavaScript -->
+        </div>
+
+        <div id="simulation-guidance" aria-live="polite">
+          <!-- Guidance populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Scenario Planner -->
+    <div id="scenarios" class="tab-content">
+      <div class="simulator">
+        <h2>📊 Compare Your Options</h2>
+        <p style="margin-bottom: 30px; color: #666;">Three realistic scenarios. Click each to see the numbers. Pick your target, then work backward.</p>
+
+        <div class="scenario-compare" id="scenario-cards">
+          <!-- Scenarios populated by JavaScript -->
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+          <h3>💡 Jesse's Real Talk</h3>
+          <p style="margin-bottom: 15px;"><strong>Survival Mode:</strong> This keeps the lights on while you learn. It's not sexy but it's honest. Most first businesses start here.</p>
+          <p style="margin-bottom: 15px;"><strong>Growth Mode:</strong> This is the sweet spot. You're making real money, partners are engaged, you can scale without breaking.</p>
+          <p><strong>Scale Mode:</strong> This is the dream. But it requires systems, consistency, and grind. Don't rush here - earn it.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Execution Plan -->
+    <div id="execution" class="tab-content">
+      <div class="action-plan">
+        <h2>✅ Your Step-by-Step Execution Plan</h2>
+        <p style="margin-bottom: 30px; color: #666;">This is your roadmap. Do these in order. Check them off as you go. This isn't theory - it's your actual path to first dollar.</p>
+
+        <div class="action-step">
+          <h4><span class="step-number">1</span> Get Your Money Right (Week 1)</h4>
+          <p style="margin-bottom: 10px;">Before you sell anything, you need to know your numbers cold.</p>
+          <div class="checkbox-group">
+            <label><input type="checkbox"> Open a separate business bank account (even if it's just a checking account)</label>
+            <label><input type="checkbox"> Calculate EXACT cost for each product (blank + ink + time + shipping)</label>
+            <label><input type="checkbox"> Set your prices using the simulator above (don't guess)</label>
+            <label><input type="checkbox"> Figure out how much cash you need to start (hint: at least $1,500)</label>
+          </div>
+          <span class="toggle-detail" onclick="toggleDetail(this)">Why this matters →</span>
+          <div class="detail-content">
+            <strong>Real talk:</strong> Most first businesses fail because they don't know their numbers. You can't hustle your way out of bad math. If you're selling a $38 shirt but it costs you $35 after everything, you're working for free. Start with the money right.
+          </div>
+        </div>
+
+        <div class="action-step">
+          <h4><span class="step-number">2</span> Build Your Sample Kit (Week 1-2)</h4>
+          <p style="margin-bottom: 10px;">You can't sell what people can't see and touch.</p>
+          <div class="checkbox-group">
+            <label><input type="checkbox"> Order 10-15 blanks in different styles (tees, caps, mugs)</label>
+            <label><input type="checkbox"> Press 5-7 sample designs (including BYOA examples)</label>
+            <label><input type="checkbox"> Create a simple lookbook (phone photos are fine to start)</label>
+            <label><input type="checkbox"> Price out what 50 partner kits will actually cost you</label>
+          </div>
+          <span class="toggle-detail" onclick="toggleDetail(this)">Why this matters →</span>
+          <div class="detail-content">
+            <strong>Real talk:</strong> Your samples ARE your business. They need to look professional. People buy with their eyes first. If your samples look cheap, they think your products are cheap. Invest here. And be honest about partner kit costs - if you're charging $50 but it costs you $40 to make, you're only making $10 per partner before you even start.
+          </div>
+        </div>
+
+        <div class="action-step">
+          <h4><span class="step-number">3</span> Recruit Your First 5 Partners (Week 2-4)</h4>
+          <p style="margin-bottom: 10px;">Don't try to get all 50 at once. Start with 5 who you KNOW will hustle.</p>
+          <div class="checkbox-group">
+            <label><input type="checkbox"> List 20 people who are natural sellers and need side money</label>
+            <label><input type="checkbox"> Reach out to your top 10 one-on-one (text, call, in person)</label>
+            <label><input type="checkbox"> Show them the money: "Here's how you make $200-500/month"</label>
+            <label><input type="checkbox"> Close 5 partners, collect $250 ($50 × 5)</label>
+            <label><input type="checkbox"> Deliver their kits within 48 hours (speed = credibility)</label>
+          </div>
+          <span class="toggle-detail" onclick="toggleDetail(this)">Why this matters →</span>
+          <div class="detail-content">
+            <strong>Real talk:</strong> Your first 5 partners are your proof of concept. If you can't recruit 5, you can't recruit 50. Pick people who are already selling something (Mary Kay, Cutco, or just naturally hustling). They understand commission. The $250 you collect covers their kits and proves people will actually pay you. Don't recruit randoms - recruit sellers.
+          </div>
+        </div>
+
+        <div class="action-step">
+          <h4><span class="step-number">4</span> Support Your First Sales (Week 3-5)</h4>
+          <p style="margin-bottom: 10px;">Your partners' first sales are YOUR first sales. Help them win.</p>
+          <div class="checkbox-group">
+            <label><input type="checkbox"> Create a simple sales script they can use (you know how to pitch)</label>
+            <label><input type="checkbox"> Text each partner daily for the first week (not to nag, to support)</label>
+            <label><input type="checkbox"> Celebrate first sale LOUD (post it, shout them out, make it a thing)</label>
+            <label><input type="checkbox"> Deliver orders FAST (within 3 days max)</label>
+            <label><input type="checkbox"> Pay commissions IMMEDIATELY (trust = repeat sales)</label>
+          </div>
+          <span class="toggle-detail" onclick="toggleDetail(this)">Why this matters →</span>
+          <div class="detail-content">
+            <strong>Real talk:</strong> The first 30 days make or break your partners. If they don't make money fast, they'll quit. You need to be their coach, their hype man, and their delivery driver. Text them every day: "How many convos did you have today?" Keep them moving. And when someone makes a sale, pay them THAT DAY if you can. Nothing builds trust faster than fast money.
+          </div>
+        </div>
+
+        <div class="action-step">
+          <h4><span class="step-number">5</span> Scale to 25 Partners (Month 2-3)</h4>
+          <p style="margin-bottom: 10px;">Once you've proven it with 5, now you can scale.</p>
+          <div class="checkbox-group">
+            <label><input type="checkbox"> Ask your first 5 for referrals (who else sells in their network?)</label>
+            <label><input type="checkbox"> Host a recruitment event (even if it's just 10 people at a coffee shop)</label>
+            <label><input type="checkbox"> Show REAL results from your first partners (proof > promises)</label>
+            <label><input type="checkbox"> Set up a simple system (spreadsheet for tracking orders & commissions)</label>
+            <label><input type="checkbox"> Hit 25 active partners, generating $250+ each = $6,250/month revenue</label>
+          </div>
+          <span class="toggle-detail" onclick="toggleDetail(this)">Why this matters →</span>
+          <div class="detail-content">
+            <strong>Real talk:</strong> You can't scale what doesn't work. That's why you start with 5. Once you've got 5 making money consistently, you have proof. Now recruiting is easy because you're not selling a dream, you're showing results. "Look, Sarah made $380 last month in 5 hours of work." That's your recruiting pitch. And you need systems NOW. A spreadsheet tracking who sold what, who gets paid what, and when orders ship. No system = chaos at scale.
+          </div>
+        </div>
+
+        <div class="action-step">
+          <h4><span class="step-number">6</span> Run Your First Event (Month 2-3)</h4>
+          <p style="margin-bottom: 10px;">Pop-ups are where BYOA makes real money. Start small.</p>
+          <div class="checkbox-group">
+            <label><input type="checkbox"> Partner with a local gym, coffee shop, or farmer's market</label>
+            <label><input type="checkbox"> Promote 2 weeks out (flyers, social, word of mouth)</label>
+            <label><input type="checkbox"> Bring your heat press, samples, and 3-5 partners to help</label>
+            <label><input type="checkbox"> Do 10-20 BYOA presses at $18-35 each = $180-700 in one day</label>
+            <label><input type="checkbox"> Collect emails for future events</label>
+          </div>
+          <span class="toggle-detail" onclick="toggleDetail(this)">Why this matters →</span>
+          <div class="detail-content">
+            <strong>Real talk:</strong> Events are your money maker for BYOA. People show up, bring their hoodies, and walk away with custom pieces in 20 minutes. You can do $500-1,000 in a single afternoon. And it's CASH. Plus it builds hype - when people see the heat press in action, they want in. Your partners can work the event with you, make commission, and see how it's done. It's a sales training and money maker in one.
+          </div>
+        </div>
+
+        <div class="action-step">
+          <h4><span class="step-number">7</span> Measure & Adjust (Month 3-6)</h4>
+          <p style="margin-bottom: 10px;">After 90 days, you'll have real data. Use it.</p>
+          <div class="checkbox-group">
+            <label><input type="checkbox"> Track which partners are actually selling (cut the dead weight)</label>
+            <label><input type="checkbox"> Identify your top 3 performers (give them bonuses, more support)</label>
+            <label><input type="checkbox"> Calculate actual margins (are you making what you thought?)</label>
+            <label><input type="checkbox"> Survey customers (what do they love? what's missing?)</label>
+            <label><input type="checkbox"> Adjust prices, products, or partner commission based on reality</label>
+          </div>
+          <span class="toggle-detail" onclick="toggleDetail(this)">Why this matters →</span>
+          <div class="detail-content">
+            <strong>Real talk:</strong> Month 3 is when you learn the truth. Some partners will be killing it, some will have sold nothing. Don't be sentimental - focus your energy on the winners. If someone hasn't sold anything in 60 days, they're not going to. That's okay. Replace them. And check your numbers - if your margins are lower than you thought, something's off. Fix it now before it becomes a bigger problem. This business is about iteration. Start, measure, adjust, repeat.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Expert Guidance -->
+    <div id="guidance" class="tab-content">
+      <div class="action-plan">
+        <h2>🧭 Expert Guidance: What You Need to Know</h2>
+        <p style="margin-bottom: 30px; color: #666;">You've got street smarts. Here's the business knowledge to go with it. This is everything I wish someone told me before my first venture.</p>
+
+        <div class="guidance-box warning">
+          <h4>🚨 Red Flags That Will Kill You</h4>
+          <ul style="margin-left: 20px; margin-top: 10px;">
+            <li><strong>Running out of cash:</strong> You need at least 3 months of operating costs saved. If you're at $400/month costs, that's $1,200 minimum. No cash = dead business, even if sales are coming.</li>
+            <li><strong>Underpricing:</strong> If you're not making 50%+ gross margin, you will fail. Period. Don't compete on price - compete on value.</li>
+            <li><strong>Dead partners dragging you down:</strong> If 10 of your 25 partners aren't selling, they're costing you time and energy. Cut them loose by month 2.</li>
+            <li><strong>Slow delivery:</strong> In direct sales, speed = trust. If orders take 2 weeks, partners lose faith and customers complain. 3-5 days max.</li>
+            <li><strong>No systems:</strong> Once you hit 10-15 partners, chaos hits if you don't have tracking. You'll lose orders, miss commissions, and blow trust.</li>
+          </ul>
+        </div>
+
+        <div class="guidance-box success">
+          <h4>✅ Green Lights That Mean You're Winning</h4>
+          <ul style="margin-left: 20px; margin-top: 10px;">
+            <li><strong>Partners are recruiting their friends:</strong> When your partners bring new partners without you asking, you've built something real.</li>
+            <li><strong>Repeat customers:</strong> If people buy once, then buy again, your product and service are solid.</li>
+            <li><strong>You're profitable by month 3:</strong> If you're covering all costs and paying yourself by month 3, you're ahead of 90% of first businesses.</li>
+            <li><strong>Partners hitting $500+/month:</strong> When you've got 3-5 partners consistently doing $500+, you know the model works at scale.</li>
+            <li><strong>Event waiting lists:</strong> If people are asking when your next pop-up is, you've created demand.</li>
+          </ul>
+        </div>
+
+        <div class="guidance-box">
+          <h4>💰 The Money Truth: What This Really Costs</h4>
+          <p style="margin-bottom: 10px;"><strong>Startup costs (one-time):</strong></p>
+          <ul style="margin-left: 20px; margin-bottom: 15px;">
+            <li>Heat press: $300-600 (don't cheap out, you'll regret it)</li>
+            <li>Initial inventory (blanks, ink, transfers): $500-800</li>
+            <li>50 partner kits (if you're going all in): $1,750-2,000 to produce ($50 × 50 = $2,500 collected, so $500-750 net)</li>
+            <li>Website/social setup: $0-200 (DIY to start)</li>
+            <li><strong>Total startup: $1,500-$3,000</strong></li>
+          </ul>
+          <p style="margin-bottom: 10px;"><strong>Monthly operating costs:</strong></p>
+          <ul style="margin-left: 20px; margin-bottom: 15px;">
+            <li>Supplies (ink, transfers, packaging): $150-250</li>
+            <li>Shipping: $100-200 (depends on volume)</li>
+            <li>Gas/events: $50-100</li>
+            <li>Partner support (your time): priceless but factor it in</li>
+            <li><strong>Total monthly: $300-550</strong></li>
+          </ul>
+          <p><strong>Reality check:</strong> You need $2,000-4,000 total to launch properly. If you don't have it, start smaller. Get 10 partners instead of 50. Do 2 events instead of 5. Scale when you have cash, not before.</p>
+        </div>
+
+        <div class="guidance-box">
+          <h4>📈 Growth Milestones: What to Aim For</h4>
+          <p style="margin-bottom: 10px;"><strong>Month 1:</strong></p>
+          <ul style="margin-left: 20px; margin-bottom: 15px;">
+            <li>Goal: 5 partners recruited, $250 collected</li>
+            <li>Goal: First 10 sales ($300-500 revenue)</li>
+            <li>Goal: Break even on operating costs</li>
+          </ul>
+          <p style="margin-bottom: 10px;"><strong>Month 3:</strong></p>
+          <ul style="margin-left: 20px; margin-bottom: 15px;">
+            <li>Goal: 15-25 partners active</li>
+            <li>Goal: $3,000-6,000 monthly revenue</li>
+            <li>Goal: $500-1,500 profit (after all costs including your pay)</li>
+          </ul>
+          <p style="margin-bottom: 10px;"><strong>Month 6:</strong></p>
+          <ul style="margin-left: 20px; margin-bottom: 15px;">
+            <li>Goal: 25-35 partners, 60%+ active rate</li>
+            <li>Goal: $8,000-12,000 monthly revenue</li>
+            <li>Goal: $2,500-4,000 profit (you're making real money now)</li>
+          </ul>
+          <p><strong>Remember:</strong> These are targets, not guarantees. If you hit 70% of these numbers, you're still winning. The key is consistent growth, not perfection.</p>
+        </div>
+
+        <div class="guidance-box">
+          <h4>🎯 Jesse's Personal Sales Advantages</h4>
+          <p style="margin-bottom: 10px;">You've got skills most people don't. Here's how they translate to this business:</p>
+          <ul style="margin-left: 20px; margin-bottom: 15px;">
+            <li><strong>You know how to read people:</strong> That's recruiting. You can spot who's a talker vs a doer in 5 minutes.</li>
+            <li><strong>You understand commission:</strong> You've worked for percentages. You know how to stay motivated when it's all on you.</li>
+            <li><strong>You can move product face-to-face:</strong> Most people freeze up. You don't. That's your edge in events and recruitment.</li>
+            <li><strong>You know how to work your network:</strong> Street sales is all networking. Same here - your cousin, your barber, your gym buddy. They're all potential partners or customers.</li>
+            <li><strong>You're comfortable with hustle:</strong> This business requires grind, especially early. You already know how to hustle. Now you're just legitimizing it and scaling it.</li>
+          </ul>
+          <p><strong>Your edge:</strong> While someone with an MBA is overthinking a business plan for 6 months, you're already out there selling. That speed and comfort with action is worth more than any degree. Trust it.</p>
+        </div>
+
+        <div class="guidance-box warning">
+          <h4>⚠️ Common First-Timer Mistakes (And How to Avoid Them)</h4>
+          <p style="margin-bottom: 10px;"><strong>Mistake #1: Trying to be perfect before launching</strong></p>
+          <p style="margin-left: 20px; margin-bottom: 15px;">→ Fix: Launch with 5 products and 5 partners. You'll learn more in 2 weeks of real sales than 2 months of planning.</p>
+          
+          <p style="margin-bottom: 10px;"><strong>Mistake #2: Recruiting anyone who says yes</strong></p>
+          <p style="margin-left: 20px; margin-bottom: 15px;">→ Fix: Be picky. 10 hustlers beat 50 tire-kickers every time. Quality > quantity on partners.</p>
+          
+          <p style="margin-bottom: 10px;"><strong>Mistake #3: Not tracking everything</strong></p>
+          <p style="margin-left: 20px; margin-bottom: 15px;">→ Fix: Google Sheets is your friend. Track every order, every commission, every cost. What you measure, you can manage.</p>
+          
+          <p style="margin-bottom: 10px;"><strong>Mistake #4: Underestimating time</strong></p>
+          <p style="margin-left: 20px; margin-bottom: 15px;">→ Fix: This isn't passive income. First 6 months, expect 20-40 hours/week. It's a second job that becomes a first job if you do it right.</p>
+          
+          <p style="margin-bottom: 10px;"><strong>Mistake #5: Giving up too early</strong></p>
+          <p style="margin-left: 20px; margin-bottom: 15px;">→ Fix: Most businesses don't hit stride until month 4-6. If you quit at month 2 because it's not exploding yet, you'll never know what it could've been. Give it 6 months of real effort.</p>
+        </div>
+
+        <div style="margin-top: 30px; padding: 30px; background: linear-gradient(135deg, #111 0%, #333 100%); color: white; border-radius: 8px;">
+          <h3 style="margin-bottom: 15px;">💪 Final Words: You Got This</h3>
+          <p style="margin-bottom: 15px;">Jesse, everything you need to win is already inside you. You know how to sell. You know how to hustle. You know how to read people and move product. That's 80% of what makes this work.</p>
+          <p style="margin-bottom: 15px;">The other 20% is just structure - the numbers, the systems, the plan. That's what this tool gives you. Use it. Check the simulator before making big decisions. Follow the execution plan step by step. And trust your gut when something feels off.</p>
+          <p style="margin-bottom: 15px;">This isn't a get-rich-quick scheme. It's a real business with real work and real potential. If you put in 90 days of focused effort, you'll know whether it's working. If it is, double down. If it's not, you'll have learned more than most people learn in 5 years of "planning."</p>
+          <p style="font-weight: 700; font-size: 1.1rem;">Start small. Move fast. Measure everything. Adjust and repeat. You got this.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // TAB SWITCHING
+    // ==========================================
+    function switchTab(tabName, el) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Remove active class from all tabs
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected tab content
+      const contentEl = document.getElementById(tabName);
+      if (contentEl) {
+        contentEl.classList.add('active');
+      }
+      
+      // Determine which tab button should become active. Prefer the element passed in;
+      // fallback to find a tab with matching data attribute.
+      const activeTab = el || document.querySelector(`.tab[data-tab="${tabName}"]`);
+      if (activeTab) {
+        activeTab.classList.add('active');
+      }
+    }
+
+    // ==========================================
+    // TOGGLE DETAIL SECTIONS
+    // ==========================================
+    function toggleDetail(element) {
+      const detailContent = element.nextElementSibling;
+      detailContent.classList.toggle('show');
+      element.textContent = detailContent.classList.contains('show') ? 'Hide details ←' : 'Why this matters →';
+    }
+
+    // ==========================================
+    // FINANCIAL SIMULATOR
+    // ==========================================
+    function updateSimulation() {
+      // Get input values
+      const partners = parseInt(document.getElementById('partners').value);
+      const activeRate = parseInt(document.getElementById('active-rate').value);
+      const salesPerPartner = parseInt(document.getElementById('sales-per-partner').value);
+      const commission = parseInt(document.getElementById('commission').value);
+      const operatingCosts = parseInt(document.getElementById('operating-costs').value);
+      
+      // Update display values
+      document.getElementById('val-partners').textContent = partners;
+      document.getElementById('val-active').textContent = activeRate + '%';
+      document.getElementById('val-sales-per').textContent = '$' + salesPerPartner;
+      document.getElementById('val-commission').textContent = commission + '%';
+      document.getElementById('val-operating').textContent = '$' + operatingCosts;
+      
+      // Calculate metrics
+      const activePartners = Math.round(partners * (activeRate / 100));
+      const monthlyRevenue = activePartners * salesPerPartner;
+      const partnerCommissions = monthlyRevenue * (commission / 100);
+      
+      // COGS (Cost of Goods Sold) - realistic 40% average
+      const cogs = monthlyRevenue * 0.40;
+      
+      // Gross profit after COGS and commissions
+      const grossProfit = monthlyRevenue - cogs - partnerCommissions;
+      
+      // Net profit after operating costs
+      const netProfit = grossProfit - operatingCosts;
+      
+      // Gross margin percentage
+      const grossMargin = monthlyRevenue > 0 ? ((monthlyRevenue - cogs) / monthlyRevenue * 100) : 0;
+      
+      // Annual projection
+      const annualRevenue = monthlyRevenue * 12;
+      const annualProfit = netProfit * 12;
+      
+      // Partner kit revenue (one-time)
+      const kitRevenue = partners * 50;
+      const kitCosts = partners * 35; // Estimated kit cost
+      const kitProfit = kitRevenue - kitCosts;
+      
+      // Cash runway (months before running out of money with $2000 starting cash)
+      const startingCash = 2000;
+      const runway = netProfit < 0 ? Math.floor(startingCash / Math.abs(netProfit)) : 99;
+      
+      // Prepare formatted display strings with negative sign formatting
+      const netProfitDisplay = netProfit < 0 ? '-$' + Math.abs(netProfit).toLocaleString() : '$' + netProfit.toLocaleString();
+      const annualProfitDisplay = annualProfit < 0 ? '-$' + Math.abs(annualProfit).toLocaleString() : '$' + annualProfit.toLocaleString();
+
+      // Generate results HTML
+      const resultsHTML = `
+        <div class="metric-card">
+          <div class="metric-label">Monthly Revenue</div>
+          <div class="metric-value">$${monthlyRevenue.toLocaleString()}</div>
+          <div class="metric-subtext">${activePartners} active partners selling</div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-label">Your Monthly Profit</div>
+          <div class="metric-value" style="color: ${netProfit > 0 ? '#28a745' : '#dc3545'}">${netProfitDisplay}</div>
+          <div class="metric-subtext">After all costs & commissions</div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-label">Gross Margin</div>
+          <div class="metric-value" style="color: ${grossMargin >= 55 ? '#28a745' : '#dc3545'}">${grossMargin.toFixed(1)}%</div>
+          <div class="metric-subtext">Target: 55%+ to thrive</div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-label">Partner Kit Profit</div>
+          <div class="metric-value">$${kitProfit.toLocaleString()}</div>
+          <div class="metric-subtext">One-time from ${partners} kits</div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-label">Annual Projection</div>
+          <div class="metric-value">${annualProfitDisplay}</div>
+          <div class="metric-subtext">$${annualRevenue.toLocaleString()} revenue</div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-label">Cash Runway</div>
+          <div class="metric-value" style="color: ${runway >= 3 ? '#28a745' : '#dc3545'}">${runway > 12 ? '12+' : runway} mo</div>
+          <div class="metric-subtext">With $2k starting cash</div>
+        </div>
+      `;
+      
+      document.getElementById('simulation-results').innerHTML = resultsHTML;
+      
+      // Generate guidance
+      let guidanceHTML = '';
+      
+      if (netProfit < 0) {
+        guidanceHTML += `
+          <div class="guidance-box warning">
+            <h4>🚨 Warning: You're Losing Money</h4>
+            <p>With these numbers, you'd lose $${Math.abs(netProfit).toLocaleString()} per month. That's not sustainable.</p>
+            <p><strong>Quick fixes:</strong></p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+              <li>Increase active partner rate (recruit better, support harder)</li>
+              <li>Raise sales per partner (better training, better products)</li>
+              <li>Lower operating costs (do you really need to spend $${operatingCosts}?)</li>
+              <li>Or recruit more partners to spread fixed costs</li>
+            </ul>
+          </div>
+        `;
+      } else if (netProfit < 500) {
+        guidanceHTML += `
+          <div class="guidance-box">
+            <h4>⚠️ Survival Mode: You're Breaking Even</h4>
+            <p>You're making $${netProfit.toLocaleString()}/month profit. That's not terrible for starting out, but it's not enough to quit your day job.</p>
+            <p><strong>To level up:</strong> You need to get to $1,500+/month profit to feel comfortable. That means either more partners, higher sales per partner, or both.</p>
+          </div>
+        `;
+      } else if (netProfit < 2000) {
+        guidanceHTML += `
+          <div class="guidance-box success">
+            <h4>✅ Growth Mode: You're Making Money</h4>
+            <p>$${netProfit.toLocaleString()}/month profit is solid. You're in growth mode. Keep this up for 6 months and you'll have real momentum.</p>
+            <p><strong>Next level:</strong> Push to $2,500-3,000/month profit. That's where you can consider making this your main gig.</p>
+          </div>
+        `;
+      } else {
+        guidanceHTML += `
+          <div class="guidance-box success">
+            <h4>🚀 Scale Mode: You're Crushing It</h4>
+            <p>$${netProfit.toLocaleString()}/month profit? That's real money. You're in the top 10% of first-year businesses.</p>
+            <p><strong>What's next:</strong> At this level, you should be thinking about systems, hiring help, and scaling beyond just you. Protect this - don't get sloppy with costs or partner quality.</p>
+          </div>
+        `;
+      }
+      
+      if (grossMargin < 55) {
+        guidanceHTML += `
+          <div class="guidance-box warning">
+            <h4>🚨 Margin Alert: Your Numbers Are Tight</h4>
+            <p>Your gross margin is ${grossMargin.toFixed(1)}%. That's too low. You need 55%+ to be healthy.</p>
+            <p><strong>Fix this now:</strong> Either raise prices, lower product costs, or cut commission slightly. Don't ignore this - low margins kill businesses.</p>
+          </div>
+        `;
+      }
+      
+      if (activeRate < 40) {
+        guidanceHTML += `
+          <div class="guidance-box warning">
+            <h4>⚠️ Partner Activity Problem</h4>
+            <p>Only ${activeRate}% of your partners are active. That means most are dead weight.</p>
+            <p><strong>Reality:</strong> Cut the inactive partners and replace them with hustlers. Better to have 10 active partners than 50 inactive ones.</p>
+          </div>
+        `;
+      }
+      
+      if (runway < 3 && netProfit < 0) {
+        guidanceHTML += `
+          <div class="guidance-box warning">
+            <h4>🚨 URGENT: Cash Crisis</h4>
+            <p>You'd run out of money in ${runway} month(s). That's emergency territory.</p>
+            <p><strong>Do this NOW:</strong> Either inject more cash, cut costs dramatically, or pivot the model. You can't operate at this loss rate.</p>
+          </div>
+        `;
+      }
+      
+      document.getElementById('simulation-guidance').innerHTML = guidanceHTML;
+    }
+
+    // ==========================================
+    // SCENARIO PLANNER
+    // ==========================================
+    function generateScenarios() {
+      const scenarios = [
+        {
+          name: "Survival Mode",
+          description: "Conservative start, minimal risk",
+          partners: 15,
+          activeRate: 50,
+          salesPerPartner: 200,
+          commission: 25,
+          operatingCosts: 350
+        },
+        {
+          name: "Growth Mode",
+          description: "Balanced growth, solid execution",
+          partners: 25,
+          activeRate: 60,
+          salesPerPartner: 300,
+          commission: 25,
+          operatingCosts: 450
+        },
+        {
+          name: "Scale Mode",
+          description: "Aggressive growth, proven model",
+          partners: 40,
+          activeRate: 65,
+          salesPerPartner: 400,
+          commission: 25,
+          operatingCosts: 600
+        }
+      ];
+      
+      let scenarioHTML = '';
+      
+      scenarios.forEach((scenario, index) => {
+        const activePartners = Math.round(scenario.partners * (scenario.activeRate / 100));
+        const monthlyRevenue = activePartners * scenario.salesPerPartner;
+        const partnerCommissions = monthlyRevenue * (scenario.commission / 100);
+        const cogs = monthlyRevenue * 0.40;
+        const grossProfit = monthlyRevenue - cogs - partnerCommissions;
+        const netProfit = grossProfit - scenario.operatingCosts;
+        const annualProfit = netProfit * 12;
+        
+        // Prepare display values with negative sign formatting
+        const netProfitDisplay = netProfit < 0 ? '-$' + Math.abs(netProfit).toLocaleString() : '$' + netProfit.toLocaleString();
+        const annualProfitDisplay = netProfit < 0 ? '-$' + Math.abs(annualProfit).toLocaleString() : '$' + annualProfit.toLocaleString();
+        scenarioHTML += `
+          <div class="scenario-card" tabindex="0" role="button"
+            aria-label="${scenario.name}: ${scenario.description}. Press Enter or Space to load."
+            onclick="selectScenario(${index})"
+            onkeypress="if(event.key === 'Enter' || event.key === ' ') { selectScenario(${index}); }">
+            <h4>${scenario.name}</h4>
+            <p style="color: #555; font-size: 0.9rem; margin-bottom: 15px;">${scenario.description}</p>
+            <div style="margin-bottom: 10px;">
+              <div style="font-size: 0.875rem; color: #555;">Partners: ${scenario.partners} (${activePartners} active)</div>
+              <div style="font-size: 0.875rem; color: #555;">Sales/Partner: $${scenario.salesPerPartner}</div>
+              <div style="font-size: 0.875rem; color: #555;">Commission: ${scenario.commission}%</div>
+            </div>
+            <div style="border-top: 2px solid #eee; padding-top: 15px; margin-top: 15px;">
+              <div style="font-size: 0.875rem; color: #555; margin-bottom: 5px;">Monthly Profit</div>
+              <div style="font-size: 1.5rem; font-weight: 700; color: ${netProfit > 0 ? '#28a745' : '#dc3545'};">${netProfitDisplay}</div>
+              <div style="font-size: 0.875rem; color: #777; margin-top: 5px;">${annualProfitDisplay}/year</div>
+            </div>
+            <button type="button" style="margin-top: 15px; width: 100%;" aria-label="Load ${scenario.name} scenario" onclick="selectScenario(${index})">Load This Scenario</button>
+          </div>
+        `;
+      });
+      
+      document.getElementById('scenario-cards').innerHTML = scenarioHTML;
+    }
+    
+    function selectScenario(index) {
+      const scenarios = [
+        { partners: 15, activeRate: 50, salesPerPartner: 200, commission: 25, operatingCosts: 350 },
+        { partners: 25, activeRate: 60, salesPerPartner: 300, commission: 25, operatingCosts: 450 },
+        { partners: 40, activeRate: 65, salesPerPartner: 400, commission: 25, operatingCosts: 600 }
+      ];
+      
+      const scenario = scenarios[index];
+      
+      // Update simulator inputs
+      document.getElementById('partners').value = scenario.partners;
+      document.getElementById('active-rate').value = scenario.activeRate;
+      document.getElementById('sales-per-partner').value = scenario.salesPerPartner;
+      document.getElementById('commission').value = scenario.commission;
+      document.getElementById('operating-costs').value = scenario.operatingCosts;
+      
+      // Switch to simulator tab
+      switchTab('simulator');
+      
+      // Update simulation
+      updateSimulation();
+    }
+
+    // ==========================================
+    // EXECUTION PLAN CHECKBOX PERSISTENCE
+    // ==========================================
+    function initializeExecutionPlan() {
+      // Persist the state of execution plan checkboxes using localStorage
+      const checkboxes = document.querySelectorAll('#execution input[type="checkbox"]');
+      checkboxes.forEach((checkbox, index) => {
+        const key = 'execution-step-' + index;
+        // Restore saved state
+        const savedState = localStorage.getItem(key);
+        if (savedState !== null) {
+          checkbox.checked = savedState === 'true';
+        }
+        // Save state on change
+        checkbox.addEventListener('change', () => {
+          localStorage.setItem(key, checkbox.checked);
+        });
+      });
+    }
+
+    // ==========================================
+    // INITIALIZE ON LOAD
+    // ==========================================
+    window.onload = function() {
+      updateSimulation();
+      generateScenarios();
+      initializeExecutionPlan();
+    };
+  </script>
+</body>
+</html>
