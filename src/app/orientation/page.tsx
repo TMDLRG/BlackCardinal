@@ -5,12 +5,7 @@ import { cookies } from 'next/headers';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Calendar, BookOpen, User } from 'lucide-react';
 import Link from 'next/link';
-import {
-  DEFAULT_TEST_NAME,
-  ensureTestBootcampEnrollment,
-  ensureTestUser,
-  TEST_USER_ID,
-} from '@/lib/test-mode';
+import { DEFAULT_TEST_NAME, ensureTestBootcampEnrollment, ensureTestUser, DEFAULT_TEST_EMAIL } from '@/lib/test-mode';
 
 export const dynamic = 'force-dynamic';
 
@@ -64,7 +59,9 @@ export default async function OrientationPage() {
     await ensureTestUser();
     await ensureTestBootcampEnrollment();
 
-    const status = await getOrientationStatus(TEST_USER_ID);
+    // Resolve the real test user id by email (avoids fixed-ID mismatch)
+    const testUser = await prisma.user.findUnique({ where: { email: DEFAULT_TEST_EMAIL } });
+    const status = await getOrientationStatus(testUser?.id || DEFAULT_TEST_EMAIL);
     const allComplete = status.hasProfile && status.hasScheduled && status.hasEnrollment;
 
     return (
