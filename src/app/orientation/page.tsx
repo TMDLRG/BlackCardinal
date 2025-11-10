@@ -100,7 +100,7 @@ export default async function OrientationPage() {
               description="Add your name, city, and bio so we can showcase you on the roster."
               completed={status.hasProfile}
               actionLabel="Complete Profile"
-              actionHref="/dashboard/profile"
+              actionHref="/dashboard"
             />
             <ChecklistItem
               icon={<Calendar className="h-6 w-6" />}
@@ -170,7 +170,7 @@ export default async function OrientationPage() {
             description="Add your name, city, and bio so we can showcase you on the roster."
             completed={status.hasProfile}
             actionLabel="Complete Profile"
-            actionHref="/dashboard/profile"
+            actionHref="/dashboard"
           />
           <ChecklistItem
             icon={<Calendar className="h-6 w-6" />}
