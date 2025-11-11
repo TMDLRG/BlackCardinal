@@ -62,10 +62,10 @@ export function Hero() {
         {/* CTAs */}
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
           <Button size="lg" asChild>
-            <a href="#products">Shop Merch</a>
+            <a href="/store">Shop Merch</a>
           </Button>
           <Button variant="outline" size="lg" asChild>
-            <a href="#byoa">Book BYOA</a>
+            <a href="/store?category=BYOA">Book BYOA</a>
           </Button>
         </div>
 

@@ -90,19 +90,19 @@ export default async function DashboardPage() {
               icon={<Users className="h-8 w-8 text-ember" />}
               label="Total Leads"
               value={stats.totalLeads.toString()}
-              href="/dashboard/leads"
+              href="/dashboard"
             />
             <StatCard
               icon={<DollarSign className="h-8 w-8 text-ember" />}
               label="Open Deals"
               value={stats.openDeals.toString()}
-              href="/dashboard/deals"
+              href="/dashboard"
             />
             <StatCard
               icon={<BarChart3 className="h-8 w-8 text-ember" />}
               label="Revenue"
               value={`$${(stats.totalRevenue / 100).toFixed(0)}`}
-              href="/dashboard/deals"
+              href="/dashboard"
             />
             <StatCard
               icon={<BookOpen className="h-8 w-8 text-ember" />}
@@ -115,9 +115,9 @@ export default async function DashboardPage() {
           {/* Action Cards */}
           <div className="grid gap-6 md:grid-cols-2">
             <Button asChild className="w-full justify-start" size="lg" variant="outline">
-              <Link href="/dashboard/leads">
+              <Link href="/dashboard">
                 <Users className="mr-3 h-5 w-5" />
-                Manage Leads
+                View Dashboard
               </Link>
             </Button>
             <Button asChild className="w-full justify-start" size="lg" variant="outline">
@@ -195,19 +195,19 @@ export default async function DashboardPage() {
             icon={<Users className="h-6 w-6" />}
             label="Total Leads"
             value={stats.totalLeads.toString()}
-            href="/dashboard/leads"
+            href="/dashboard"
           />
           <StatCard
             icon={<BarChart3 className="h-6 w-6" />}
             label="Open Deals"
             value={stats.openDeals.toString()}
-            href="/dashboard/deals"
+            href="/dashboard"
           />
           <StatCard
             icon={<DollarSign className="h-6 w-6" />}
             label="Total Revenue"
             value={`$${(stats.totalRevenue / 100).toFixed(2)}`}
-            href="/dashboard/deals"
+            href="/dashboard"
           />
           <StatCard
             icon={<BookOpen className="h-6 w-6" />}
@@ -222,15 +222,15 @@ export default async function DashboardPage() {
           <h2 className="mb-6 text-2xl font-bold text-ink">Quick Actions</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Button asChild variant="outline" className="h-auto justify-start p-6">
-              <Link href="/dashboard/leads">
+              <Link href="/store">
                 <Users className="mr-3 h-5 w-5" />
-                Manage Leads
+                Shop Store
               </Link>
             </Button>
             <Button asChild variant="outline" className="h-auto justify-start p-6">
-              <Link href="/dashboard/deals">
+              <Link href="/founding-50">
                 <BarChart3 className="mr-3 h-5 w-5" />
-                Log a Deal
+                Founding 50
               </Link>
             </Button>
             <Button asChild variant="outline" className="h-auto justify-start p-6">
