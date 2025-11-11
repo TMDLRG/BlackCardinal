@@ -48,3 +48,52 @@ src/podcast.db-journal
 # build cache
 bak.next/
 
+# Private books and manuscripts
+book_v11.txt
+BlackCardinal_FoundingFifty_Kit_V1ALL.txt
+*Part_*.md
+
+# Status reports and deployment docs (temporary/internal use only)
+*_STATUS.md
+*_SUMMARY.md
+*_COMPLETE.md
+*_SUCCESS.md
+*_REPORT.md
+*_GUIDE.md
+*_STEPS.md
+*_PLAN.md
+*_FIXES.md
+*_DIAGNOSIS.md
+*_REMEDIATION.md
+*_SOLUTION.md
+*_VERIFICATION.md
+*_PROGRESS.md
+DEPLOYMENT*.md
+VERCEL*.md
+GITHUB*.md
+CLOUDFLARE*.md
+PRODUCTION*.md
+TESTING*.md
+TEST_LOGIN*.md
+SITE_IS_LIVE*.md
+FINAL*.md
+QUICK*.md
+START_HERE.md
+DEMO_GUIDE.md
+CURSOR*.md
+TEAM_SUMMARY.md
+PROJECT_STATUS.md
+IMPLEMENTATION*.md
+LOCAL_SETUP*.md
+PRODUCT_CATALOG*.md
+UI_FIXES*.md
+E2E_TEST*.md
+BOOTCAMP_*.md
+VISUAL_SUMMARY.md
+BUILD_COMPLETE.md
+DEPLOY_NOW.md
+
+# Temporary HTML files
+blackcardinal-business-canvas-v2.html
+index.html
+
